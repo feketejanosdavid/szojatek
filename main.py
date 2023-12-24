@@ -8,6 +8,7 @@ class App:
         self.pont = 0
         self.opcio = ''
         self.valtozo =''
+        self.aktual_pont = 0
         
     def fajl_beolvas(self):
         fp = open(self.szavak_harom, 'r', encoding='utf-8')
@@ -20,8 +21,16 @@ class App:
         
     def szo_valasztas(self):
         self.szo = random.choice(self.harom_betus)
-        print(self.szo)
     
+    def kieso_szavak(self):
+        if self.valtozo != self.szo:
+            if self.valtozo != 'szabad' and self.valtozo != 'elso' and self.valtozo != 'masodik' and self.valtozo != 'harmadik' and len(self.valtozo) == 3:
+                self.nem_talalt.append(self.valtozo)
+                print('Nem megfelelő szavak:\n', self.nem_talalt)
+            elif self.valtozo == 'elso' or self.valtozo == 'masodik' or self.valtozo == 'harmadik':
+                self.aktual_pont += -10
+            elif self.valtozo == 'szabad':
+                self.aktual_pont += -80   
 
     def talalat(self):
         while self.valtozo != self.szo:
@@ -44,7 +53,7 @@ class App:
                     print('Gratulálok, eltaláltad!')
                     
             elif self.valtozo == 'szabad':
-                print(self.szo)     
+                print(self.szo)   
             elif self.valtozo == 'elso':
                 print(self.szo[0])
             elif self.valtozo == 'masodik':
@@ -53,19 +62,14 @@ class App:
                 print(self.szo[2])
             else:
                 print('Három betűs szavakat adj meg!')
-        
-    def kieso_szavak(self):
-        if self.valtozo != self.szo:
-            self.nem_talalt.append(self.valtozo)
-            print('Nem megfelelő szavak:\n', self.nem_talalt)
-            
+            app.kieso_szavak()
+                    
     def pont_szamito(self):
         if self.valtozo == self.szo:
             self.pont += 100
             self.levonas = len(self.nem_talalt)*1
             self.pont = self.pont - self.levonas
-        elif self.valtozo == 'elso' or self.valtozo == 'masodik' or self.valtozo == 'harmadik':
-            self.pont = self.pont - 10
+            self.pont += self.aktual_pont
                 
     def kor(self):
         self.valtozo = ''
@@ -78,8 +82,9 @@ class App:
         self.nem_talalt.clear()
     
     def futtatas(self):
-            print('Válassz opciót:\n\nJáték elkezdése (kezdés)\nAktuális pontszám(pontszám)\nKilépés(vége)')
-            while self.opcio != 'vége':
+        while self.opcio != 'vége':
+            if self.pont == 0:
+                print('\n\nVálassz opciót:\n Játék elkezdése (kezdés)\n Aktuális pontszám(pontszám)\n Kilépés(vége)')   
                 self.opcio = input('\nVálasztott opció: ')
                 if self.opcio == 'kezdés':
                     app.kor()
@@ -91,12 +96,22 @@ class App:
                 else:
                     print('Alábbi parancsokat írd be: kezdés pontszám vége.')
                     
-            
-            
+                    
+            elif self.pont > 0:
+                print('\n\nVálassz opciót:\n Játék folytatása (folytatás)\n Aktuális pontszám(pontszám)\n Kilépés(vége)')   
+                self.opcio = input('\nVálasztott opció: ')
+                if self.opcio == 'folytatás':
+                    app.kor()
+                elif self.opcio == 'pontszám':
+                    print('Aktuális pontszám:', self.pont)
+                elif self.opcio == 'vége':
+                    print('Játék vége!\nElért pontszám:', self.pont)
+                    break
+                else:
+                    print('Alábbi parancsokat írd be: kezdés pontszám vége.')
                 
                 
-                
-                                         
+                                   
 app = App()
 app.fajl_beolvas()
 app.futtatas()
