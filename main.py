@@ -4,6 +4,10 @@ class App:
     def __init__(self):
         self.szavak_harom = 'harom_betus.txt'
         self.harom_betus = []
+        self.nem_talalt = []
+        self.pont = 0
+        self.opcio = ''
+        self.valtozo =''
         
     def fajl_beolvas(self):
         fp = open(self.szavak_harom, 'r', encoding='utf-8')
@@ -16,53 +20,83 @@ class App:
         
     def szo_valasztas(self):
         self.szo = random.choice(self.harom_betus)
+        print(self.szo)
     
-    def jatek(self):
+
+    def talalat(self):
+        while self.valtozo != self.szo:
+            self.valtozo = input('Add meg a szavadat: ')
+            if len(self.valtozo) ==3:
+                if self.valtozo[0] == self.szo[0] and self.valtozo[1] != self.szo[1] and self.valtozo[2] != self.szo[2]:
+                    print(f'{self.szo[0]} * *')
+                elif self.valtozo[0] != self.szo[0] and self.valtozo[1] == self.szo[1] and self.valtozo[2] != self.szo[2]:
+                    print(f'* {self.szo[1]} *')
+                elif self.valtozo[0] != self.szo[0] and self.valtozo[1] != self.szo[1] and self.valtozo[2] == self.szo[2]:
+                    print(f'* * {self.szo[2]}')
+                elif self.valtozo[0] == self.szo[0] and self.valtozo[1] == self.szo[1] and self.valtozo[2] != self.szo[2]:
+                    print(f'{self.szo[0]} {self.szo[1]} *')
+                elif self.valtozo[0] != self.szo[0] and self.valtozo[1] == self.szo[1] and self.valtozo[2] == self.szo[2]:
+                    print(f'* {self.szo[1]} {self.szo[2]}')
+                elif self.valtozo[0] == self.szo[0] and self.valtozo[1] != self.szo[1] and self.valtozo[2] == self.szo[2]:
+                    print(f'{self.szo[0]} * {self.szo[2]}') 
+                #ha eltalálta    
+                elif self.valtozo == self.szo:
+                    print('Gratulálok, eltaláltad!')
+                    
+            elif self.valtozo == 'szabad':
+                print(self.szo)     
+            elif self.valtozo == 'elso':
+                print(self.szo[0])
+            elif self.valtozo == 'masodik':
+                print(self.szo[1])
+            elif self.valtozo == 'harmadik':
+                print(self.szo[2])
+            else:
+                print('Három betűs szavakat adj meg!')
+        
+    def kieso_szavak(self):
+        if self.valtozo != self.szo:
+            self.nem_talalt.append(self.valtozo)
+            print('Nem megfelelő szavak:\n', self.nem_talalt)
+            
+    def pont_szamito(self):
+        if self.valtozo == self.szo:
+            self.pont += 100
+            self.levonas = len(self.nem_talalt)*1
+            self.pont = self.pont - self.levonas
+        elif self.valtozo == 'elso' or self.valtozo == 'masodik' or self.valtozo == 'harmadik':
+            self.pont = self.pont - 10
+                
+    def kor(self):
         self.valtozo = ''
         print('Ha szabad a gazda, akkor írd be, hogy: szabad')
         print('Ha nem tudsz egy szót, írd be, hogy: elso vagy masodik vagy harmadik')
-        #különböző esetek
-        while self.valtozo != self.szo:
-            try:
-                self.valtozo = input('Add meg a szavadat: ')
-                if len(self.valtozo) ==3:
-                    if self.valtozo[0] == self.szo[0] and self.valtozo[1] != self.szo[1] and self.valtozo[2] != self.szo[2]:
-                        print(f'{self.szo[0]} * *')
-                    elif self.valtozo[0] != self.szo[0] and self.valtozo[1] == self.szo[1] and self.valtozo[2] != self.szo[2]:
-                        print(f'* {self.szo[1]} *')
-                    elif self.valtozo[0] != self.szo[0] and self.valtozo[1] != self.szo[1] and self.valtozo[2] == self.szo[2]:
-                        print(f'* * {self.szo[2]}')
-                    elif self.valtozo[0] == self.szo[0] and self.valtozo[1] == self.szo[1] and self.valtozo[2] != self.szo[2]:
-                        print(f'{self.szo[0]} {self.szo[1]} *')
-                    elif self.valtozo[0] != self.szo[0] and self.valtozo[1] == self.szo[1] and self.valtozo[2] == self.szo[2]:
-                        print(f'* {self.szo[1]} {self.szo[2]}')
-                    elif self.valtozo[0] == self.szo[0] and self.valtozo[1] != self.szo[1] and self.valtozo[2] == self.szo[2]:
-                        print(f'{self.szo[0]} * {self.szo[2]}') 
-                        
-                    #ha eltalálta    
-                    elif self.valtozo == self.szo:
-                        print('Gratulálok, eltaláltad!')
-                      
+        app.szo_valasztas()
+        app.talalat()
+        app.pont_szamito()
+        print('Pontszám:', self.pont)
+        self.nem_talalt.clear()
+    
+    def futtatas(self):
+            print('Válassz opciót:\n\nJáték elkezdése (kezdés)\nAktuális pontszám(pontszám)\nKilépés(vége)')
+            while self.opcio != 'vége':
+                self.opcio = input('\nVálasztott opció: ')
+                if self.opcio == 'kezdés':
+                    app.kor()
+                elif self.opcio == 'pontszám':
+                    print('Aktuális pontszám:', self.pont)
+                elif self.opcio == 'vége':
+                    print('Játék vége!\nElért pontszám:', self.pont)
+                    break
                 else:
-                    #ha szabad a gazda
-                    if self.valtozo == 'szabad':
-                        print(self.szo)
-                        break
-                        
-                    #ha segítséget kért
-                    elif self.valtozo == 'elso':
-                        print(self.szo[0])
-                    elif self.valtozo == 'masodik':
-                        print(self.szo[1])
-                    elif self.valtozo == 'harmadik':
-                        print(self.szo[2])
+                    print('Alábbi parancsokat írd be: kezdés pontszám vége.')
                     
-            except IndexError:
-                print('Három betűs szavakat adj meg!')
-    #def jatek vége
             
-                     
+            
+                
+                
+                
+                                         
 app = App()
 app.fajl_beolvas()
-app.szo_valasztas()
-app.jatek()
+app.futtatas()
