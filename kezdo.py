@@ -27,7 +27,7 @@ class Kezdo:
                 self.nem_talalt.append(self.valtozo)
                 print('Nem megfelelő szavak:\n', self.nem_talalt)
             elif self.valtozo == 'elso' or self.valtozo == 'masodik' or self.valtozo == 'harmadik':
-                self.aktual_pont += -10
+                self.aktual_pont += -30
             elif self.valtozo == 'szabad':
                 self.aktual_pont += -80   
 
@@ -82,31 +82,29 @@ class Kezdo:
     def futtatas(self):
         while self.opcio != 'vége':
             if self.pont == 0:
-                print('\n\nVálassz opciót:\n Játék elkezdése (kezdés)\n Aktuális pontszám(pontszám)\n Kilépés(kilépés)')   
+                print('\n\nVálassz opciót:\n kezdés        pontszám          vissza')   
                 self.opcio = input('\nVálasztott opció: ')
                 if self.opcio == 'kezdés':
                     app.kor()
                 elif self.opcio == 'pontszám':
                     print('Aktuális pontszám:', self.pont)
-                elif self.opcio == 'kilépés':
+                elif self.opcio == 'vissza':
                     print('Játék vége!\nElért pontszám:', self.pont)
                     break
                 else:
-                    print('Alábbi parancsokat írd be: kezdés pontszám vége.')
+                    print('Alábbi parancsok közül választhatsz: kezdés, pontszám, vissza.')
                     
                     
             elif self.pont > 0:
-                print('\n\nVálassz opciót:\n Játék folytatása (folytatás)\n Aktuális pontszám(pontszám)\n Kilépés(kilépés)')   
+                print('\n\nVálassz opciót:\n folytatás              vissza')   
                 self.opcio = input('\nVálasztott opció: ')
                 if self.opcio == 'folytatás' or self.opcio == 'folytat':
                     app.kor()
-                elif self.opcio == 'pontszám' or self.opcio == 'pont' or self.opcio == 'pontok':
-                    print('Aktuális pontszám:', self.pont)
-                elif self.opcio == 'vége' or self.opcio == 'kilépés':
+                elif self.opcio == 'Vissza' or self.opcio == 'vissza':
                     print('Játék vége!\nElért pontszám:', self.pont)
                     break
                 else:
-                    print('Alábbi parancsokat írd be: kezdés pontszám vége.')                                  
+                    print('Alábbi parancsok közül választhatsz: folytatás, vissza')                                  
 app = Kezdo()
 app.fajl_beolvas()
 app.futtatas()
